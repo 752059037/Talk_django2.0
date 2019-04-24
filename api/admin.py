@@ -3,7 +3,6 @@ from django.contrib import admin
 from api import models
 
 
-
 class DeviceConfigAdmin(admin.ModelAdmin):
     list_display = [i.name for i in models.DeviceConfig._meta.fields]
     list_display_links = list_display
