@@ -24,7 +24,9 @@ class DeviceConfig(models.Model):
     config_interval = models.IntegerField(default=720)
     wifi_ssid = models.CharField(max_length=16)
     wifi_psword = models.CharField(max_length=16)
-
+    start_time = models.DateTimeField(auto_now_add=True)
+    update_time = models.DateTimeField(auto_now=True)
+    
 
 class DeviceStatus(models.Model):
     device_id = models.CharField(max_length=16)
@@ -33,3 +35,6 @@ class DeviceStatus(models.Model):
     devicetime = models.CharField(max_length=255)
     storage = models.CharField(max_length=255)
     wifi_db = models.CharField(max_length=255)
+    start_time = models.DateTimeField(auto_now_add=True)
+    update_time = models.DateTimeField(auto_now=True)
+    

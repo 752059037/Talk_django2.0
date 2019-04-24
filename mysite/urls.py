@@ -23,9 +23,6 @@ urlpatterns = [
     path('getconfig', views.get_config),
     
     # 编辑配置信息的url
-    path('state_list/', views.DeviceStatusList.as_view()),
-    path('add_edit_config/', views.AddEditConfig.as_view()),
-    path('delete_config/', views.DeleteConfig.as_view()),
     path('admin/', admin.site.urls),
-    re_path('', views.DeviceList.as_view()),
+    re_path('', admin.site.urls),
 ]

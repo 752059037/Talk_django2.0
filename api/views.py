@@ -1,8 +1,7 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import HttpResponse
 from api import models
 from api.utils import is_ascii
-from api.forms import DeviceConfigForm, DeviceStatusForm
-from django import views
+from api.forms import DeviceStatusForm
 import logging
 from rest_framework import permissions
 from rest_framework.response import Response
@@ -75,54 +74,3 @@ def get_device_status(request):
         logging.error(get_heartbeat_error)
 
 
-class DeviceStatusList(views.View):
-    @staticmethod
-    def get(request):
-        device_id = request.GET.get('deviceID', '')
-        query_dict = models.DeviceStatus.objects.filter(device_id=device_id).values()
-        status_list = list(query_dict)
-        return render(request, 'state_list.html', {'status_list': status_list, 'device_id':device_id})
-
-
-class DeviceList(views.View):  # 显示设备列表
-    @staticmethod
-    def get(request):
-        device_id_list = models.DeviceConfig.objects.values_list('device_id')
-        device_id_list = [i[0] for i in device_id_list]
-        return render(request, 'device_list.html', {'device_id_list': device_id_list})
-
-
-class AddEditConfig(views.View):  # 添加/编辑配置
-    @staticmethod
-    def get(request):
-        device_id = request.GET.get('deviceID', '')
-        config_obj = models.DeviceConfig.objects.filter(device_id=device_id).first()
-        form_obj = DeviceConfigForm(instance=config_obj)
-        return render(request, 'add_edit_config.html', {'form_obj': form_obj, 'device_id': device_id})
-    
-    try:
-        @staticmethod
-        def post(request):
-            device_id = request.GET.get('deviceID', '')
-            config_obj = models.DeviceConfig.objects.filter(device_id=device_id).first()
-            form_obj = DeviceConfigForm(request.POST, instance=config_obj)
-            if form_obj.is_valid():
-                form_obj.save()
-                _next_url = '/'
-                return redirect(_next_url)
-            else:
-                return render(request, 'add_edit_config.html', {
-                    'form_obj': form_obj,
-                    'device_id': device_id,
-                    'error_msg': form_obj.errors
-                })
-    except Exception as save_config_error:
-        logging.error(save_config_error)
-        
-class DeleteConfig(views.View):
-    @staticmethod
-    def get(request):
-        device_id = request.GET.get('deviceID', '')
-        form_obj = models.DeviceConfig.objects.filter(device_id=device_id).first()
-        form_obj.delete()
-        return redirect('/')
