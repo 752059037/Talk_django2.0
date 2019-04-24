@@ -6,14 +6,14 @@ from django.db import models
 
 class DeviceConfig(models.Model):
     record_start_choice = (
-        ('1', '1'),
-        ('2', '2'),
-        ('3', '3'),
-        ('4', '4'),
-        ('5', '5'),
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
     )
     
-    device_id = models.CharField(max_length=255, unique=True,
+    device_id = models.CharField(max_length=16, unique=True,
                                  help_text="字符串	16 位ASSCII码设备ID。第一批设备序列号： TK2019040001-TK2019040200 "
     
                                  )
